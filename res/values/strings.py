@@ -64,6 +64,8 @@ DB_CON_OK_MESSAGE = 'DB connection success...'
 DUMP_CONTRACTS_NET_NODE_PATH = 'core/data/game/net/dump/contracts_net_node_pool.pkl'
 DUMP_CONTRACTS_NET_CONNECT_PATH = 'core/data/game/net/dump/contracts_net_connect_pool.pkl'
 DUMP_BUILD_NET_NODE_PATH = 'core/data/game/net/dump/build_net_node_pool.pkl'
+DUMP_CONTRACTS_DATA_FRAME = 'core/data/game/net/dump/contracts_data_frame.pkl'
+DUMP_BUILDS_DATA_FRAME = 'core/data/game/net/dump/builds_data_frame.pkl'
 
 NET_PICKLE_DOWNLOAD_N_SAVE_OK = 'Successfully downloaded and saved net data...'
 NET_PICKLE_LOAD_OK = 'Successfully loaded data from pickle files...'

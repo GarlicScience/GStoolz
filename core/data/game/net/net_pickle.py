@@ -11,8 +11,8 @@ class NetPickle:
     @classmethod
     def download_n_save(cls):
 
-        contract_net_node_pool, contract_net_connect_pool, mes1 = cls.download_contract_pools()
-        build_net_node_pool, mes2 = cls.download_build_pool()
+        contract_net_node_pool, contract_net_connect_pool, contract_frame, mes1 = cls.download_contract_pools()
+        build_net_node_pool, build_frame, mes2 = cls.download_build_pool()
 
         if mes1 == _str.DB_CON_OK_MESSAGE and mes2 == _str.DB_CON_OK_MESSAGE:
             # Pickle saving of gotten pools
@@ -25,6 +25,14 @@ class NetPickle:
 
             with open(_str.DUMP_BUILD_NET_NODE_PATH, 'wb') as output:
                 pickle.dump(build_net_node_pool, output, pickle.HIGHEST_PROTOCOL)
+
+            # Saving DataFrames
+
+            with open(_str.DUMP_CONTRACTS_DATA_FRAME, 'wb') as output:
+                pickle.dump(contract_frame, output, pickle.HIGHEST_PROTOCOL)
+
+            with open(_str.DUMP_BUILDS_DATA_FRAME, 'wb') as output:
+                pickle.dump(build_frame, output, pickle.HIGHEST_PROTOCOL)
 
         else:
             return mes1 if mes1 != _str.DB_CON_OK_MESSAGE else mes2
@@ -55,6 +63,23 @@ class NetPickle:
         return contract_net_node_pool, contract_net_connect_pool, build_net_node_pool, _str.NET_PICKLE_LOAD_OK
 
     @classmethod
+    def load_as_frames(cls):
+
+        try:
+            with open(_str.DUMP_CONTRACTS_DATA_FRAME, 'rb') as file:
+                contract_frame = pickle.load(file)
+        except IOError as err:
+            return None, None, str(err)
+
+        try:
+            with open(_str.DUMP_BUILDS_DATA_FRAME, 'rb') as file:
+                build_frame = pickle.load(file)
+        except IOError as err:
+            return None, None, str(err)
+
+        return contract_frame, build_frame, _str.NET_PICKLE_LOAD_OK
+
+    @classmethod
     def download_contract_pools(cls):
 
         contracts_frame, mes = ContractsService.load_table()
@@ -75,7 +100,7 @@ class NetPickle:
                 if row[14]:
                     for connect in cls.__parse_connections(row[1], row[14]):
                         contract_net_connect_pool.append(connect)
-        return contract_net_node_pool, contract_net_connect_pool, mes
+        return contract_net_node_pool, contract_net_connect_pool, contracts_frame, mes
 
     @classmethod
     def download_build_pool(cls):
@@ -94,7 +119,7 @@ class NetPickle:
 
                 # TODO: Don't forget to provide a work with < req_bld >
 
-        return build_net_node_pool, mes
+        return build_net_node_pool, build_frame, mes
 
     @classmethod
     def __parse_connections(cls, id_, row):

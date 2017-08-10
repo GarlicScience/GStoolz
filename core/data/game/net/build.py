@@ -19,3 +19,9 @@ class Build:
 
     def __repr__(self):
         return self.__str__()
+
+    def info(self):
+        return 'id:{} \nname_list:{} \nreq_lvl:{} \ntime:{} \nturn_expansion:{}'.format(
+            self.id, self.name_list, self.req_lvl, self.time, self.turn_expansion) + \
+            ' \nskip_cost:{} \nprice:{} \nexp_rew:{} \nmax_amount:{} \ncontracts:{}'.format(
+           self.skip_cost, self.price, self.exp_rew, self.max_amount, self.contracts)
